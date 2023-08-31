@@ -1,23 +1,26 @@
 #!/usr/bin/python3.6
 
-import sys, requests
+import sys, requests, urllib.parse
 
 bot_token = "123456789:ABCdefghIJKlmnOPQrstuVWXYz"
 chat_id = "123456789"
 
-log = "SMS: От: " +  sys.argv[1] + " Текст: " + sys.argv[2]
+# Remove non-utf8 chars
+sys.argv[2]=bytes(sys.argv[2], 'utf-8').decode('utf-8', 'ignore')
+
+log = "SMS: От: " +  sys.argv[1] + " Текст: " + sys.argv[2] + "\n"
 
 print(log)
 
 # Save message to log
 
-text_file = open("/var/log/sms", "a+")
+text_file = open("/var/log/sms.txt", "a+")
 text_file.write(log)
 text_file.close()
 
 # Send message
 
-message = "Пришла SMS:\n\nОт: <b>" +  sys.argv[1] + "</b>\nТекст: <code>" + sys.argv[2] + "</code>"
+message = "Пришла SMS:\n\nОт: <code>" +  urllib.parse.quote(sys.argv[1]) + "</code>\nТекст: <b>" + urllib.parse.quote(sys.argv[2]) + "</b>"
 req = requests.get("https://api.telegram.org/bot" + bot_token + "/sendMessage?parse_mode=HTML&chat_id=" + chat_id + "&text=" + message)
 if (req.status_code != 200):
     print("Сообщение не отправлено! Статус код: " + str(req.status_code))
