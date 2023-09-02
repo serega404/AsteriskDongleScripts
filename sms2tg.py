@@ -1,6 +1,7 @@
 #!/usr/bin/python3.6
 
 import sys, requests, urllib.parse
+from datetime import datetime
 
 bot_token = "123456789:ABCdefghIJKlmnOPQrstuVWXYz"
 chat_id = "123456789"
@@ -8,7 +9,7 @@ chat_id = "123456789"
 # Remove non-utf8 chars
 sys.argv[2]=bytes(sys.argv[2], 'utf-8').decode('utf-8', 'ignore')
 
-log = "SMS: От: " +  sys.argv[1] + " Текст: " + sys.argv[2] + "\n"
+log = "[" + datetime.now().strftime("%d-%m-%Y %H:%M:%S") + "] SMS: От: " +  sys.argv[1] + " Текст: " + sys.argv[2] + "\n"
 
 print(log)
 
